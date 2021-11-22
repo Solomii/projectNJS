@@ -2,5 +2,5 @@ POST http://localhost:3000/api/url/shorten
 content-type: application/json
 
 {
-  "longUrl": "https://www.yakaboo.ua/ua/knigi.html?gclid=CjwKCAiAnO2MBhApEiwA8q0HYYVgL4WchagR1fcXF5WBnDZkmkFQ_dM-DrLTLDOX0Rvt1S-Xlq-wexoC3EwQAvD_BwE"
+  "longUrl": "https://www.yakaboo.ua/ua/knigi.html?dir=desc&gclid=CjwKCAiAnO2MBhApEiwA8q0HYaZupb5xBsv7dVOoySMeUqTnu0gKkPsKtpcCj_O18UlPF2l-HyGHfhoCMN8QAvD_BwE&order=popularity"
 }
