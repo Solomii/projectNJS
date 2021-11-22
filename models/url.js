@@ -1,20 +1,29 @@
 const mongoose = require("mongoose");
-const shortUrlId = require("shortid");
+// const shortUrlId = require("shortid");
 // shortUrlId.generate();
 
 const urlSchema = new mongoose.Schema({
-    longURL: {
+    // longURL: {
+    //     type: String,
+    //     required: true
+    // },
+    // shortURL: {
+    //     type: String,
+    //     required: true,
+    //     default: shortUrlId.generate
+    // },
+    // clicks: {
+    //     type: Number,
+    //     required: true,
+    //     default:0
+    // }
+    urlCode: String,
+    longUrl: String,
+    shortUrl: String,
+    date: {
         type: String,
-        required: true
-    },
-    shortURL: {
-        type: String,
-        required: true,
-    },
-    shortUrlId: {
-        type: String,
-        required: true,
-        unique: true
+        default: Date.now
     }
+
 });
-module.exports = mongoose.model("url", urlSchema);
+module.exports = mongoose.model("Url", urlSchema);
