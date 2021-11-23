@@ -15,16 +15,39 @@
   <body>
     <div>
       <h1>URL Shortener</h1>
-      <form action="" class="my-4 form-inline">
+      <form action="/shorten" method="POST" class="my-4 form-inline">
         <label for="" class="sr-only">URL</label>
         <input
-          required
+          required=""
           placeholder="URL"
           type="url"
+          name="longUrl"
+          id="longUrl"
           class="form-control col mr-2"
         />
         <button type="submit" class="btn btn-primary">create url</button>
       </form>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Long URL</th>
+              <th>Short URl</th>
+              <th>Clicks</th>
+            </tr>
+          </thead>
+          <tbody> 
+      <tr> 
+        <th scope="row">#</th> 
+        <td><a target="" href="#">Long URL https://dfjfhiudfdsa</a></td>
+        <td><a target="" href="#">Short URL http:///fjdi</a> </td>
+        <td>0</td> 
+      </tr> 
+    </tbody>
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>

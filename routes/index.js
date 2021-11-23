@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-
 const Url = require('../models/url');
 
 router.get('/:urlCode', async (req, res) => {
