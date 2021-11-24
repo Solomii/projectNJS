@@ -3,9 +3,11 @@ const PORT = process.env.PORT || 5000;
 require("./config/db").connect();
 const express = require('express');
 const app = express();
+const Url = require('./models/url');
 
 app.use(express.urlencoded({ extented: true }));
 app.use(express.json());
+
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {

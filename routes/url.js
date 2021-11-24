@@ -26,15 +26,15 @@ router.post('/shorten', async (req, res) => {
         const shortUrl = `${baseUrl}/${urlCode}`;
 
        url = new Url({
-          longUrl,
+          longUrl:req.body.longUrl,
           shortUrl,
           urlCode,
           date: new Date()
         });
 
         await url.save();
-
         res.json(url);
+        return res.redirect(baseUrl);
       }
     } catch (err) {
       console.error(err);
