@@ -37,6 +37,20 @@
               <th>Clicks</th>
             </tr>
           </thead>
+          <tbody>
+            <% let indexId= 1; urls.forEach( (url) => { %>
+            <tr>
+              <th scope="row"><%=indexId %></th>
+              <td>
+                <a href="<%= url.longUrl %>"> <%= url.longUrl %> </a>
+              </td>
+              <td>
+                <a href="<%= url.urlCode %>"> <%= url.urlCode %> </a>
+              </td>
+              <td><%= url.clicks %></td>
+            </tr>
+            <% indexId +=1; }) %>
+          </tbody>
         </table>
       </div>
     </div>
