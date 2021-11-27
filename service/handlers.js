@@ -72,8 +72,6 @@ async function deleteUrl(req, res) {
   }
 };
 
-
-
 module.exports = {
   createNewShortUrl,
   deleteUrl,

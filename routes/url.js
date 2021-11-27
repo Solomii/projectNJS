@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const validUrl = require('valid-url');
-const shortId = require('shortid');
 require('dotenv').config({ path: '../.env' });
-const {createNewShortUrl, deleteUrl} = require('../service/handlers')
-const Url = require("../models/url")
+const { createNewShortUrl, deleteUrl, redirectToSite } = require('../service/handlers');
+
+router.get('/:urlCode', (req, res) => {
+  redirectToSite(req, res);
+})
 
 router.post('/shorten',  (req, res) => {
   createNewShortUrl(req, res);
