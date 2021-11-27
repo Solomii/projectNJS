@@ -4,6 +4,23 @@ const validUrl = require('valid-url');
 const shortId = require('shortid');
 require('dotenv').config({ path: '../.env' });
 
+async function redirectToSite(req, res) {
+    try {
+    const url = await Url.findOne({ urlCode: req.params.urlCode });
+    if (url) {
+      url.clicks++;
+      url.save();
+      return res.redirect(url.longUrl)
+    } else {
+      return res.status(404).json({message: "no url found"})
+    }
+    
+  } catch (error) {
+    console.error(err);
+    res.status(500).json({message: 'Server error'});
+  }
+};
+
 async function createNewShortUrl(req, res) {
   const { longUrl } = req.body;
   const baseUrl = process.env.BASE_URL;
@@ -59,5 +76,6 @@ async function deleteUrl(req, res) {
 
 module.exports = {
   createNewShortUrl,
-  deleteUrl
+  deleteUrl,
+  redirectToSite
 }
