@@ -14,6 +14,7 @@ app.set("view engine", "ejs");
 app.use('/', require('./routes/index'));
 app.use('/api/url', require('./routes/url'));
 
+
 app.use('/', async (req, res, next) => {
 	const urls = await Url.find();
 	res.render('index', {

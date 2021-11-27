@@ -45,4 +45,16 @@ router.post('/shorten', async (req, res) => {
   } 
 })
 
+router.get("/delete/:urlCode", async (req, res, next) => {
+  try {
+    const url = await Url.findOne({ urlCode: req.params.urlCode });
+    if (url == null) return res.sendStatus(404);
+    url.remove();
+    console.log(url);
+    res.redirect("/");
+  } catch (err) {
+    next(err)
+  }
+});
+
 module.exports = router;
