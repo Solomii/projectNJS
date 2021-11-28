@@ -1,12 +1,11 @@
 const Url = require("../models/url");
-const express = require('express');
-const validUrl = require('valid-url');
 const shortId = require('shortid');
 require('dotenv').config({ path: '../.env' });
+var validator = require('validator');
 
 async function redirectToSite(req, res) {
     try {
-    const url = await Url.findOne({ urlCode: req.params.urlCode });
+    const url = await findOneUrlParams(req.params.urlCode);
     if (url) {
       url.clicks++;
       url.save();
@@ -25,13 +24,13 @@ async function createNewShortUrl(req, res) {
   const { longUrl } = req.body;
   const baseUrl = process.env.BASE_URL;
 
-  if (!validUrl.isUri(baseUrl)) {
+  if (!validator.isURL(baseUrl)) {
     return res.status(401).json({ message: 'Invalid base url' });
   }
 
   const urlCode = shortId.generate();
 
-   if (validUrl.isUri(longUrl)) {
+   if (validator.isURL(longUrl)) {
     try {
       let url = await Url.findOne({ longUrl });
 
@@ -41,15 +40,14 @@ async function createNewShortUrl(req, res) {
         const shortUrl = `${baseUrl}/${urlCode}`;
 
        url = new Url({
-          longUrl:req.body.longUrl,
+          longUrl,
           shortUrl,
           urlCode,
           date: new Date()
         });
 
         await url.save();
-        return res.redirect(baseUrl);
-        res.json(url);
+        res.redirect(baseUrl);
       }
     } catch (err) {
       console.error(err);
@@ -60,17 +58,23 @@ async function createNewShortUrl(req, res) {
      }
 };
   
-async function deleteUrl(req, res) {
+async function deleteUrl(req, res, next) {
     try {
-    const url = await Url.findOne({ urlCode: req.params.urlCode });
-    if (url == null) return res.sendStatus(404);
+    const url = await findOneUrlParams(req.params.urlCode);
+      if (url == null) {
+        return res.sendStatus(404);
+      }
     url.remove();
-    console.log(url);
     res.redirect("/");
   } catch (err) {
     next(err)
   }
 };
+
+// To DO rename function 
+function findOneUrlParams(urlCode) {
+    return Url.findOne({ urlCode })
+}
 
 module.exports = {
   createNewShortUrl,

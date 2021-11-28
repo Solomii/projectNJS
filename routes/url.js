@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-require('dotenv').config({ path: '../.env' });
 const { createNewShortUrl, deleteUrl, redirectToSite } = require('../service/handlers');
 
 router.get('/:urlCode', (req, res) => {
