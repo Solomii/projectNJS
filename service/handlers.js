@@ -1,7 +1,7 @@
 const Url = require("../models/url");
 const shortId = require('shortid');
+let validator = require('validator');
 require('dotenv').config({ path: '../.env' });
-var validator = require('validator');
 
 async function redirectToSite(req, res) {
     try {
@@ -24,10 +24,6 @@ async function createNewShortUrl(req, res) {
   const { longUrl } = req.body;
   const baseUrl = process.env.BASE_URL;
 
-  if (!validator.isURL(baseUrl)) {
-    return res.status(401).json({ message: 'Invalid base url' });
-  }
-
   const urlCode = shortId.generate();
 
    if (validator.isURL(longUrl)) {
@@ -35,7 +31,7 @@ async function createNewShortUrl(req, res) {
       let url = await Url.findOne({ longUrl });
 
       if (url) {
-        res.json(url);
+        res.status(200).json(url);
       } else {
         const shortUrl = `${baseUrl}/${urlCode}`;
 
@@ -48,13 +44,14 @@ async function createNewShortUrl(req, res) {
 
         await url.save();
         res.redirect(baseUrl);
+        res.status(201).json({message: "create new url"})
       }
     } catch (err) {
       console.error(err);
       res.status(500).json('Server error');
     }
   } else {
-     res.status(401).json('Invalid long url');
+     res.status(401).json({message:'Invalid long url'});
      }
 };
   
