@@ -22,57 +22,54 @@ describe('Test Url', () => {
 
 
   before(function () {
-    // common suite timeout that doesn't really need to be placed inside before block
     this.timeout(60000); 
   }); 
-  // ...
   afterEach(function (done) {
     this.timeout(120000);
-    // ...
     done();
   });
   
-  const urlss = {
-    _id: null,
-    urlCode: "S_oxYhYsL",
-    longUrl: "https://www.yakaboo.ua/ua/mazepa-hronika-pravoslavnogo-shljahticha-ruina.html",
-    shortUrl: "http://localhost:3000/S_oxYhYsL",
-    clicks:0,
 
+  let returnedUrlObject;
+    const longUrlObject = {
+    longUrl: "https://www.yakaboo.ua/ua/mazepa-hronika-pravoslavnogo-shljahticha-ruina.html"
   };
 
  describe("GET /", () => {
-    it("it should ALL long the url", (done) => {
+    it("it should return main page", (done) => {
       chai.request(app)
         .get('/')
-        .send(urlss)
         .end((err, res) => {
           should.not.exist(err);
           res.should.have.status(200);
           res.body.should.be.a('object');
+          expect(res.headers['content-type']).to.have.string('text/html');
           done();
         })
-
     })
-
   });
 
   describe("POST /api/url/shorten", () => {
-    it("it should long the url", (done) => {
+    it("it should return long url", (done) => {
       chai.request(app)
         .post('/api/url/shorten')
-        .send(urlss)
+        .send(longUrlObject)
         .end((err, res) => {
           should.not.exist(err);
           res.should.have.status(200);
+          returnedUrlObject = res.body;
           res.body.should.be.a('object');
           res.body.should.have.property('longUrl').eq("https://www.yakaboo.ua/ua/mazepa-hronika-pravoslavnogo-shljahticha-ruina.html");
+          res.body.should.have.property('_id');
+          res.body.should.have.property('urlCode');
+          res.body.should.have.property('shortUrl');
+          res.body.should.have.property('clicks');
+          res.body.should.have.property('date');
           done();
         })
-
     })
 
-    it("it should NOT long the url", (done) => {
+    it("it should return validation error for invalid url", (done) => {
       chai.request(app)
         .post('/api/url/shorten')
         .send({
@@ -80,26 +77,26 @@ describe('Test Url', () => {
         })
         .end((err, res) => {
           res.status.should.equal(401);
+          res.body.should.have.property('message').eql("Invalid long url");
           done();
         })
-
     })
-
   });
 
     describe("GET /:urlCode", () => {
-      it("It should GET a urlss by urlCode", (done) => {
+      it("It should return other site by urlCode", (done) => {
             chai.request(app)                
-                .get("/" + urlss.urlCode)
+                .get("/" + returnedUrlObject.urlCode)
               .end((err, res) => {
+                res.should.have.status(200);
                 should.equal(err, null);
-                expect(urlss.urlCode).to.equal("S_oxYhYsL");
+                expect(res.headers['content-type']).to.have.string('text/html');
                 done();
                 });
         });
 
-      it("It should NOT GET a urlss by urlCode", (done) => {
-          const urlCode = 'S_oxYhYsV'
+      it("It should return error by invalid urlCode", (done) => {
+          const urlCode = 'thisIsInvalidUrlCode'
             chai.request(app)                
                 .get("/" + urlCode)
               .end((err, res) => {
@@ -108,11 +105,12 @@ describe('Test Url', () => {
                 done();
                 });
         });
-
     });
 
 
 
+  
+  
   
  });
 
