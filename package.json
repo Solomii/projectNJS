@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --timeout 10000",
+    "test": "nyc mocha --timeout 10000",
     "start": "SET NODE_ENV=dev && node server.js",
     "dev": "nodemon server.js"
   },
@@ -20,15 +20,22 @@
   },
   "homepage": "https://github.com/Solomii/projectNJS#readme",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "chai-http": "^4.3.0",
     "config": "^3.3.6",
+    "connect-redis": "^6.0.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "expect.js": "^0.3.1",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "ioredis": "^4.28.2",
     "mongoose": "^6.0.13",
+    "node-fetch": "^3.1.0",
+    "nyc": "^15.1.0",
+    "redis": "^4.0.0",
     "shortid": "^2.2.16",
     "validator": "^13.7.0"
   },
