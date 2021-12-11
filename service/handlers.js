@@ -22,15 +22,14 @@ async function redirectToSite(req, res, next) {
       url.save();
       return res.redirect(url.longUrl)
     } else {
-      return res.status(404).json({message: "no url found"})
-   
-         }
-     
+      return res.status(404).json({ message: "no url found" })
+    }
   } catch (error) {
     console.log(error);
      return res.status(500).json({message: 'Server error'});
   }
 };
+
 async function createNewShortUrl(req, res, next) {
   const { longUrl } = req.body;
   const baseUrl = process.env.BASE_URL;
@@ -52,8 +51,8 @@ async function createNewShortUrl(req, res, next) {
         });
           client.set(urlCode, urlFromMongo, (error, result) => {
          if (error) {
-           condole.error(error)
-         };
+            condole.error(error)
+          };
          if (result) {
            console.log(result);
          }
@@ -91,7 +90,6 @@ async function deleteUrl(req, res, next) {
 function findOneUrlParams(urlCode) {
     return Url.findOne({ urlCode })
 }
-
 
 module.exports = {
   createNewShortUrl,
