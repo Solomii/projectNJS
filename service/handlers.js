@@ -8,7 +8,7 @@ async function redirectToSite(req, res, next) {
   try {
     const urlCode = req.params.urlCode;
     
-    client.get(urlCode, (err, result) => {
+  client.get(urlCode, (err, result) => {
       if (err) {
         condole.error(err)
       };
@@ -37,26 +37,25 @@ async function createNewShortUrl(req, res, next) {
  
    if (validator.isURL(longUrl)) {
      try {
+        client.set(urlCode, longUrl, (error, result) => {
+         if (error) {
+          condole.error(error)
+          };
+         if (result) {
+          console.log(result);
+         }
+        });
         let urlFromMongo = await Url.findOne({ longUrl });
-      if (urlFromMongo) {
-        res.status(200).json(urlFromMongo);
-      } else {
+        if (urlFromMongo) {
+          res.status(200).json(urlFromMongo);
+        } else {
         const shortUrl = `${baseUrl}/${urlCode}`;
-
-       let newURL = new Url({
+        let newURL = new Url({
           longUrl,
           shortUrl,
           urlCode,
           date: new Date()
-        });
-          client.set(urlCode, urlFromMongo, (error, result) => {
-         if (error) {
-            condole.error(error)
-          };
-         if (result) {
-           console.log(result);
-         }
-     })
+       });
         await newURL.save();
         res.redirect(baseUrl);
         res.status(201).json({message: "create new url"})

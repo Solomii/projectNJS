@@ -14,5 +14,4 @@ router.get("/delete/:urlCode", (req, res) => {
   deleteUrl(req, res);
 });
 
-
 module.exports = router;
