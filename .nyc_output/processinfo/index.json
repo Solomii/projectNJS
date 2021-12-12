@@ -1,1 +1,1 @@
-{"processes":{},"files":{},"externalIds":{}}
+{"processes":{"c1ad5b74-014a-4103-b20f-d37a9eab7fa2":{"parent":null,"children":[]}},"files":{"E:\\study\\course_nodeJs\\projectNJS\\service\\handlers.js":["c1ad5b74-014a-4103-b20f-d37a9eab7fa2"],"E:\\study\\course_nodeJs\\projectNJS\\models\\url.js":["c1ad5b74-014a-4103-b20f-d37a9eab7fa2"],"E:\\study\\course_nodeJs\\projectNJS\\lib\\redis.js":["c1ad5b74-014a-4103-b20f-d37a9eab7fa2"]},"externalIds":{}}

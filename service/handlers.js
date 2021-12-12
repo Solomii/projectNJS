@@ -7,8 +7,7 @@ const DEFAULT_EXPIRATION = 3600;
 async function redirectToSite(req, res, next) {
   try {
     const urlCode = req.params.urlCode;
-    
-  client.get(urlCode, (err, result) => {
+     client.get(urlCode, (err, result) => {
       if (err) {
         condole.error(err)
       };

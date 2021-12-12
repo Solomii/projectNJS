@@ -1,6 +1,5 @@
 process.env.NODE_ENV = 'test';
 require("dotenv").config();
-// const request = require('supertest');
 
 const { Url } = require('../models/url');
 const chai = require('chai');
@@ -17,17 +16,6 @@ describe('Test Url', () => {
     //        done();         
     //     });     
     // });
-  
-
-
-  before(function () {
-    this.timeout(60000); 
-  }); 
-  afterEach(function (done) {
-    this.timeout(120000);
-    done();
-  });
-  
 
   let returnedUrlObject;
     const longUrlObject = {
@@ -105,12 +93,6 @@ describe('Test Url', () => {
                 });
         });
     });
-
-
-
-  
-  
-  
  });
 
   
