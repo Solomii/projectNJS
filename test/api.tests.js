@@ -11,7 +11,7 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 describe('Test Url', () => {
-    // beforeEach((done) => { //Перед каждым тестом чистим базу
+    // beforeEach((done) => { 
     //     Url.remove({}, (err) => { 
     //        done();         
     //     });     

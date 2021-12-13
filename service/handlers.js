@@ -16,7 +16,7 @@ async function redirectToSite(req, res, next) {
       if (longUrl) {
         return res.redirect(longUrl);
       } else {
-        const url = await findOneUrlParams(urlCode);
+        const url = await findCodeFromDatabase(urlCode);
         if (url) {
           url.clicks++;
           url.save();
@@ -58,7 +58,6 @@ async function createNewShortUrl(req, res, next) {
         });
         await newURL.save();
         return res.redirect(baseUrl);
-        return res.status(201).json({ message: "create new url" });
       }
     } catch (err) {
       console.error(err);
@@ -74,7 +73,7 @@ async function createNewShortUrl(req, res, next) {
 
 async function deleteUrl(req, res, next) {
   try {
-    const url = await findOneUrlParams(req.params.urlCode);
+    const url = await findCodeFromDatabase(req.params.urlCode);
     if (url == null) {
       return res.sendStatus(404);
     }
@@ -85,8 +84,7 @@ async function deleteUrl(req, res, next) {
   }
 }
 
-// To DO rename function
-function findOneUrlParams(urlCode) {
+function findCodeFromDatabase(urlCode) {
   return Url.findOne({ urlCode });
 }
 
