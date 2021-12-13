@@ -1,96 +1,97 @@
 const Url = require("../models/url");
-const shortId = require('shortid');
+const shortId = require("shortid");
 const client = require("../lib/redis");
-let validator = require('validator');
-const DEFAULT_EXPIRATION = 3600;
+let validator = require("validator");
 
 async function redirectToSite(req, res, next) {
   try {
     const urlCode = req.params.urlCode;
-     client.get(urlCode, (err, result) => {
-      if (err) {
-        condole.error(err)
-      };
-      if (result) {
-        console.log(result)
+    if (urlCode) {
+      const longUrl = await client.get(urlCode, (err, result) => {
+        if (err) {
+          condole.error(err);
+        }
+        return result;
+      });
+      if (longUrl) {
+        return res.redirect(longUrl);
+      } else {
+        const url = await findOneUrlParams(urlCode);
+        if (url) {
+          url.clicks++;
+          url.save();
+          return res.redirect(url.longUrl);
+        } else {
+          return res.status(404).json({ message: "no url found" });
+        }
       }
-    });
-    const url = await findOneUrlParams(req.params.urlCode);
-    if (url) {
-      url.clicks++;
-      url.save();
-      return res.redirect(url.longUrl)
     } else {
-      return res.status(404).json({ message: "no url found" })
+      return res.status(400).json({ message: "bad request" });
     }
   } catch (error) {
     console.log(error);
-     return res.status(500).json({message: 'Server error'});
+    return res.status(500).json({ message: "Server error" });
   }
-};
+}
 
 async function createNewShortUrl(req, res, next) {
   const { longUrl } = req.body;
   const baseUrl = process.env.BASE_URL;
   const urlCode = shortId.generate();
- 
-   if (validator.isURL(longUrl)) {
-     try {
-        client.set(urlCode, longUrl, (error, result) => {
-         if (error) {
-          condole.error(error)
-          };
-         if (result) {
-          console.log(result);
-         }
-        });
-        let urlFromMongo = await Url.findOne({ longUrl });
-        if (urlFromMongo) {
-          res.status(200).json(urlFromMongo);
-        } else {
+
+  if (validator.isURL(longUrl)) {
+    try {
+      client.set(urlCode, longUrl, (error, result) => {
+        if (error) condole.error(error);
+        return result;
+      });
+      let urlFromMongo = await Url.findOne({ longUrl });
+      if (urlFromMongo) {
+        return res.status(200).json(urlFromMongo);
+      } else {
         const shortUrl = `${baseUrl}/${urlCode}`;
         let newURL = new Url({
           longUrl,
           shortUrl,
           urlCode,
-          date: new Date()
-       });
+          date: new Date(),
+        });
         await newURL.save();
-        res.redirect(baseUrl);
-        res.status(201).json({message: "create new url"})
+        return res.redirect(baseUrl);
+        return res.status(201).json({ message: "create new url" });
       }
-     } catch (err) {
+    } catch (err) {
       console.error(err);
-      res.status(500).json({
-         status: 'error',
-         message: 'Server error'
-       });
+      return res.status(500).json({
+        status: "error",
+        message: "Server error",
+      });
     }
   } else {
-     res.status(401).json({message:'Invalid long url'});
-     }
-};
-  
+    return res.status(401).json({ message: "Invalid long url" });
+  }
+}
+
 async function deleteUrl(req, res, next) {
-    try {
+  try {
     const url = await findOneUrlParams(req.params.urlCode);
-      if (url == null) {
-        return res.sendStatus(404);
-      }
+    if (url == null) {
+      return res.sendStatus(404);
+    }
     url.remove();
     res.redirect("/");
   } catch (err) {
-    next(err)
+    next(err);
   }
-};
+}
 
-// To DO rename function 
+// To DO rename function
 function findOneUrlParams(urlCode) {
-    return Url.findOne({ urlCode })
+  return Url.findOne({ urlCode });
 }
 
 module.exports = {
   createNewShortUrl,
   deleteUrl,
-  redirectToSite
-}
+  redirectToSite,
+};
