@@ -2,14 +2,12 @@ process.env.NODE_ENV = 'test';
 
 let httpMocks = require('node-mocks-http');
 const chai = require('chai');
-const expect = require('chai').expect;
 const { createNewShortUrl, deleteUrl, redirectToSite } = require('../service/handlers');
 const chaiHttp = require('chai-http');
 
-chai.use(require("chai-as-promised"));
 chai.use(chaiHttp);
 
-describe('/service/handlers', () => {
+describe('TEST /service/handlers', () => {
 
   it('redirectToSite should redirect to external site', async () => {
     let req = httpMocks.createRequest({
@@ -20,7 +18,6 @@ describe('/service/handlers', () => {
     let res = httpMocks.createResponse();
     let next = function () { };
     let response = await redirectToSite(req, res, next);
-    // expect(response).to.eventually.property("status", 302);
     if (response.status === 302) {
       console.log("Response status:" + response.status)
     }
