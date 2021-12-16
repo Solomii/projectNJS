@@ -47,10 +47,7 @@ async function createNewShortUrl(req, res, next) {
       });
       let urlFromMongo = await Url.findOne({ longUrl });
        if (urlFromMongo) {
-        return res.status(409).json({message: "URL Already Exist"})
-      }
-      if (urlFromMongo) {
-        return res.status(200).json(urlFromMongo);
+        return res.status(409).json({message: "URL Already Exist","urlCode":urlFromMongo.urlCode})
       } else {
         const shortUrl = `${baseUrl}/${urlCode}`;
         let newURL = new Url({
