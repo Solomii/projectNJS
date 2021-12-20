@@ -41,7 +41,7 @@ async function createNewShortUrl(req, res, next) {
 
   if (validator.isURL(longUrl)) {
     try {
-      client.set(urlCode, longUrl, (error, result) => {
+      client.set(urlCode,longUrl,'EX', 60 * 60 * 24, (error, result) => {
         if (error) condole.error(error);
         return result;
       });
