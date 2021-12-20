@@ -6,16 +6,14 @@ let validator = require("validator");
 async function redirectToSite(req, res, next) {
   try {
     const urlCode = req.params.urlCode;
-    if (urlCode) {
+    if (!urlCode) return res.status(400).json({ message: "bad request" });
       const longUrl = await client.get(urlCode, (err, result) => {
         if (err) {
           condole.error(err);
         }
         return result;
       });
-      if (longUrl) {
-        return res.redirect(longUrl);
-      } else {
+      if (longUrl) return res.redirect(longUrl);
         const url = await findCodeFromDatabase(urlCode);
         if (url) {
           url.clicks++;
@@ -24,10 +22,6 @@ async function redirectToSite(req, res, next) {
         } else {
           return res.status(404).json({ message: "no url found" });
         }
-      }
-    } else {
-      return res.status(400).json({ message: "bad request" });
-    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Server error" });
@@ -41,7 +35,7 @@ async function createNewShortUrl(req, res, next) {
 
   if (validator.isURL(longUrl)) {
     try {
-      client.set(urlCode,longUrl,'EX', 60 * 60 * 24, (error, result) => {
+      client.set(urlCode,longUrl,'EX', 60 * 60 , (error, result) => {
         if (error) condole.error(error);
         return result;
       });

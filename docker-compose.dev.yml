@@ -12,7 +12,7 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/urlshortener
     volumes:
       - ./:/app
-    command: npm run dev
+    command: npm run debug
   mongo:
     image: mongo:4.2.8
     ports:
