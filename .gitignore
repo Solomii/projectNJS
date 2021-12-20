@@ -1,0 +1,5 @@
+node_modules/
+.env
+package-lock.json
+.nyc_output
+.docker-compose.dev.yml
